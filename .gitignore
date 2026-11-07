@@ -8,6 +8,7 @@ node_modules/
 coverage/
 
 *.sqlite3
+*.tsbuildinfo
 __pycache__/
 
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { query } from "@/lib/db";
-import { createSession, currentUser, destroySession, requireUser, type AppUser } from "@/lib/auth";
+import { can, createSession, currentUser, destroySession, requireUser, type AppUser } from "@/lib/auth";
 import { audit } from "@/lib/audit";
 
 export const runtime = "nodejs";
@@ -49,7 +49,7 @@ const listSql:Record<string,string>={
  audit:"SELECT a.*,u.name user_name FROM audit_log a LEFT JOIN users u ON u.id=a.user_id ORDER BY a.id DESC LIMIT 500",
 };
 
-async function auditSafe(req:NextRequest,user:AppUser,action:string,entity:string,id:number|string|null,details:unknown={}) { try { await audit(req,user,action,entity,id,details); } catch (error) { console.error("Audit log write failed",{action,entity,id,error}); } }
+async function auditSafe(req:NextRequest,user:AppUser,action:string,entity:string,id:unknown,details:unknown={}) { try { await audit(req,user,action,entity,(id ?? null) as number | string | null,details); } catch (error) { console.error("Audit log write failed",{action,entity,id,error}); } }
 
 export async function GET(req:NextRequest,ctx:Ctx) {
  try {
