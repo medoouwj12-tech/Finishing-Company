@@ -1,0 +1,17 @@
+node_modules/
+.next/
+.vercel/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+
+*.sqlite3
+__pycache__/
+
+
+# Legacy prototype files (the deployable Next.js app lives in app/ and public/)
+/server.py
+/index.html
+/static/
